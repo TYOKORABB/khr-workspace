@@ -37,19 +37,25 @@
    Wi-Fi の設定 `keys.h` はどのリポジトリにも入っていない。`keys_sample.h` から作る。
 5. 作業場の案内（Claude Code 用）: [`workspace/CLAUDE.md`](workspace/CLAUDE.md) を `~/gsw4/CLAUDE.md` に置く。
 
-## 研究データのバックアップ（Google Drive）
+## 作業場の完全なバックアップ（Google Drive、月 1 回）
 
-git に入らない研究データ（学習済みのモデル `khr_rl_tora/logs/`、実機の生データ、動画）は、作業 PC から Google Drive の
-`研究/khr_backup/` へ rclone でコピーする（[`backup/backup_to_drive.sh`](backup/backup_to_drive.sh)。Drive 側は消さない。変わった分だけ送る）。
+コードと記録の正本は GitHub。それに加えて、作業場を丸ごと Google Drive の `研究/khr_backup/` へ写す
+（[`backup/backup_to_drive.sh`](backup/backup_to_drive.sh)、rclone）。GitHub に無いもの（学習済みのモデル `logs/` 約 8.5 GB、動画、
+実機の生データ、手元だけのブランチ）も含めて戻せる。**毎月 1 日 3:00 に cron で自動実行**（flock で二重起動しない）。
+
+- `gsw4/`: 作業場の写し（各リポジトリの .git・mp4 を含む、約 9.8 GB・1.3 万ファイル）。外すのは [`backup/filter.txt`](backup/filter.txt) のもの
+  （Python の仮想環境・非公開の assets・秘密の情報・キャッシュ）だけ。`rclone sync` なので Drive 側は手元と同じになり、
+  手元で消えた・変わったファイルは `gsw4_changed/<日付>/` に退避される（Drive からは失われない。一度に 1000 個を超えて外れるときは止まる）。
+- `secrets/secrets_<日付>.tar.gz.gpg`: 秘密の情報（ファームの書き込み前のバックアップ 5 つ・`keys.h`・`board_ip.txt`・`.env`）を
+  gpg（AES-256）で暗号化したもの。**パスフレーズは `~/.config/khr_backup/passphrase`（この PC だけ）。パスワード管理にも控えておくこと**
+  （PC が壊れるとパスフレーズも失われ、暗号化したものを開けなくなる）。
+- 戻し方は Drive 側の `README.md`（[`backup/DRIVE_README.md`](backup/DRIVE_README.md)）。
 
 ```bash
-cd ~/gsw4/khr-workspace
-backup/backup_to_drive.sh --dry-run      # 何を送るかだけ見る
-setsid nohup backup/backup_to_drive.sh > backup/last_backup.stdout 2>&1 &   # 端末やセッションを閉じても続く（数時間かかる）
+backup/backup_to_drive.sh --dry-run                                      # 何を送るかだけ見る
+setsid nohup backup/backup_to_drive.sh > backup/last_backup.stdout 2>&1 &   # 手で実行（端末を閉じても続く）
 grep -E "Transferred:|Errors" backup/last_backup.log | tail -3             # 進み具合
 ```
-
-送らないもの: assets（非公開）、ファームの書き込み前のバックアップ（Wi-Fi の情報を含む）、Python の仮想環境、git で管理しているもの。
 
 ## 運用の決まり
 

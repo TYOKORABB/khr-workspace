@@ -1,0 +1,25 @@
+# backup_to_drive.sh が作業場（/home/tora/gsw4）を Drive に写すときに外すもの（rclone の filter 形式。上から順に判定）
+# 外したもののうち、秘密の情報は暗号化して secrets/ に別に送る。それ以外は作り直せるか、ユーザーの指示で送らないもの。
+
+# Python の仮想環境の中身（約 8 GB。khr-workspace/python/README.md で作り直せる）
+- /bin/**
+- /lib/**
+- /lib64/**
+- /include/**
+- /share/**
+- /etc/**
+
+# 梶田先生の非公開の URDF・メッシュ（ユーザーの指示で、どこにもアップロードしない）
+- /assets/**
+
+# 秘密の情報（暗号化した secrets/ に入れる）: Wi-Fi の設定・ESP32 の IP・API キー・ファームのバックアップ
+- keys.h
+- board_ip.txt
+- .env
+- /khr_rl_tora/real/firmware_patches/_work/**
+
+# 作り直せるもの・キャッシュ
+- __pycache__/**
+- .pio/**
+- *.pyc
+- /khr-workspace/backup/last_backup.*

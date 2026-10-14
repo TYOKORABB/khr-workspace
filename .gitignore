@@ -1,3 +1,4 @@
 backup/last_backup.log
 backup/last_backup.stdout
+backup/cron.log
 backup/.backup.pid
