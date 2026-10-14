@@ -1,0 +1,45 @@
+diff --git a/khr_train.py b/khr_train.py
+index a9d2d95..fa8d184 100644
+--- a/khr_train.py
++++ b/khr_train.py
+@@ -70,16 +70,16 @@ def get_cfgs():
+         "default_joint_angles": {  # [rad]
+             "l_hip_yaw": 0.0,
+             "l_hip_roll": 0.0,
+-            "l_hip_pitch": -0.2,
+-            "l_knee_pitch": 0.4,
+-            "l_ankle_pitch": -0.2,
++            "l_hip_pitch": -0.5,
++            "l_knee_pitch": 1.0,
++            "l_ankle_pitch": -0.5,
+             "l_ankle_roll": 0.0,
+ 
+             "r_hip_yaw": 0.0,
+             "r_hip_roll": 0.0,
+-            "r_hip_pitch": -0.2,
+-            "r_knee_pitch": 0.4,
+-            "r_ankle_pitch": -0.2,
++            "r_hip_pitch": -0.5,
++            "r_knee_pitch": 1.0,
++            "r_ankle_pitch": -0.5,
+             "r_ankle_roll": 0.0,
+         },
+         "joint_names": [
+@@ -156,7 +156,7 @@ def get_cfgs():
+     }
+     reward_cfg = {
+         "tracking_sigma": 0.25,
+-        "base_height_target": 0.254,
++        "base_height_target": 0.2395,
+         "feet_height_target": 0.03,
+         "reward_scales": {
+             "tracking_lin_vel": 1.5,
+@@ -185,7 +185,7 @@ def get_cfgs():
+     }
+     command_cfg = {
+         "num_commands": 3,
+-        "lin_vel_x_range": [-0.2, 0.2],
++        "lin_vel_x_range": [-0.4, 0.4],
+         "lin_vel_y_range": [-0.2, 0.2],
+         "ang_vel_range": [-0.5, 0.5],
+     }
