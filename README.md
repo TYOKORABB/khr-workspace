@@ -37,6 +37,20 @@
    Wi-Fi の設定 `keys.h` はどのリポジトリにも入っていない。`keys_sample.h` から作る。
 5. 作業場の案内（Claude Code 用）: [`workspace/CLAUDE.md`](workspace/CLAUDE.md) を `~/gsw4/CLAUDE.md` に置く。
 
+## 研究データのバックアップ（Google Drive）
+
+git に入らない研究データ（学習済みのモデル `khr_rl_tora/logs/`、実機の生データ、動画）は、作業 PC から Google Drive の
+`研究/khr_backup/` へ rclone でコピーする（[`backup/backup_to_drive.sh`](backup/backup_to_drive.sh)。Drive 側は消さない。変わった分だけ送る）。
+
+```bash
+cd ~/gsw4/khr-workspace
+backup/backup_to_drive.sh --dry-run      # 何を送るかだけ見る
+setsid nohup backup/backup_to_drive.sh > backup/last_backup.stdout 2>&1 &   # 端末やセッションを閉じても続く（数時間かかる）
+grep -E "Transferred:|Errors" backup/last_backup.log | tail -3             # 進み具合
+```
+
+送らないもの: assets（非公開）、ファームの書き込み前のバックアップ（Wi-Fi の情報を含む）、Python の仮想環境、git で管理しているもの。
+
 ## 運用の決まり
 
 - **push するのは TYOKORABB のリポジトリだけ。** 梶田先生（s-kajita）のリポジトリには push しない。
